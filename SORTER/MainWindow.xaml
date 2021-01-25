@@ -372,7 +372,48 @@
                     </Button.Style>
                 </Button>
 
-                <CheckBox x:Name="Sort_Checker"  HorizontalAlignment="Right" Margin="0,215,75,0" Visibility="Hidden" Unchecked="Sort_Checker_Unchecked"/>
+                <CheckBox x:Name="Sort_Checker" Visibility="Hidden" Unchecked="Sort_Checker_Unchecked">
+                    <CheckBox.Style>
+                        <Style TargetType="CheckBox">
+                            <Setter Property="OverridesDefaultStyle" Value="True"/>
+                            <Setter Property="VerticalAlignment" Value="Bottom"/>
+                            <Setter Property="HorizontalAlignment" Value="Right"/>
+                            <Setter Property="Margin" Value="0,0,47,80"/>
+                            <Setter Property="Content" Value="Stop"/>
+                            <Setter Property="Foreground" Value="Yellow"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="CheckBox">
+                                        <Border x:Name="Check_border" Height="21" Width="42" HorizontalAlignment="Center" VerticalAlignment="Center" BorderBrush="#FFBCC500">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Style.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="Background">
+                                                                <Setter.Value>
+                                                                    <SolidColorBrush Color="Blue" Opacity="0.7"/>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                    <Setter Property="BorderThickness" Value="2"/>
+                                                    <Setter Property="BorderBrush" Value="Beige"/>
+                                                    <Setter Property="Background">
+                                                        <Setter.Value>
+                                                            <SolidColorBrush Color="Blue"/>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </Border.Style>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+
+                    </CheckBox.Style>
+                </CheckBox>
             </Grid>
         </Grid>
 
