@@ -5,6 +5,8 @@ using System.Windows;
 using System.Windows.Forms;
 using WinForms = System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
+using System.Windows.Media;
 
 namespace SORTER
 {
@@ -16,72 +18,58 @@ namespace SORTER
         public MainWindow()
         {
             InitializeComponent();
-
-            BUTTON_SORT_IS_ENABLE();
-            BUTTON_REPLACE_IS_ENABLE();
-            NON_STOP_CHECKER();
         }
 
-        private async void BUTTON_SORT_IS_ENABLE()
+        private void BUTTON_SORT_IS_ENABLE()
         {
-            while (1 == 1)
+            if (Constantly_sort.IsChecked == false)
             {
-                while (Sort_Checker.IsChecked == false)
+                //sortClickCheck
+                if (DirectoryList.Items.Count != 0 && TEXT_2.Text != "" && TypeList.Text != "")
                 {
-                    //sortClickCheck
-                    if (DirectoryList.Items.Count != 0 && TEXT_2.Text != "" && TypeList.Text != "")
-                    {
-                        SORTED.IsEnabled = true;
-                        Constantly_sort.IsEnabled = true;
-                    }
-                    else
-                    {
-                        SORTED.IsEnabled = false;
-                        Constantly_sort.IsEnabled = false;
-                    }
-                    //sortClickCheck
-                    await Task.Delay(100);
-                }
-                await Task.Delay(100);
-            }
-        }
-
-        private async void NON_STOP_CHECKER()
-        {
-            while (1 == 1)
-            {
-                while (Sort_Checker.IsChecked == true)
-                {
-                    Constantly_sort.IsEnabled = false;
-                    Deletor.IsEnabled = false;
-                    Creator.IsEnabled = false;
-                    Clean.IsEnabled = false;
-                    Replace.IsEnabled = false;
-                    TypeList.IsEnabled = false;
-                    Browser_1_Output.IsEnabled = false;
-
-                    await Task.Delay(100);
-                }
-                await Task.Delay(100);
-            }
-        }
-
-        private async void BUTTON_REPLACE_IS_ENABLE()
-        {
-            while (1 == 1)
-            {
-                if (DirectoryList.SelectedItem != null && TEXT_2.Text != "")
-                {
-                    if (Sort_Checker.IsChecked == false)
-                    {
-                        Replace.IsEnabled = true;
-                    }
+                    SORTED.IsEnabled = true;
+                    Constantly_sort.IsEnabled = true;
                 }
                 else
                 {
-                    Replace.IsEnabled = false;
+                    SORTED.IsEnabled = false;
+                    Constantly_sort.IsEnabled = false;
                 }
-                await Task.Delay(100);
+                //sortClickCheck
+            }
+            else
+            {
+                SORTED.IsEnabled = false;
+            }
+        }
+
+        private void SORTED_Click(object sender, RoutedEventArgs e)
+        {
+            new SOURCE(DirectoryList.Items, TEXT_2.Text, TypeList.Text, false);
+        }
+
+        private void Constantly_sort_Checked(object sender, RoutedEventArgs e)
+        {
+            SORTED.IsEnabled = false;
+            Deletor.IsEnabled = false;
+            Creator.IsEnabled = false;
+            Clean.IsEnabled = false;
+            Replace.IsEnabled = false;
+            TypeList.IsEnabled = false;
+            Browser_1_Output.IsEnabled = false;
+            new SOURCE(DirectoryList.Items, TEXT_2.Text, TypeList.Text, true);
+        }
+
+        private void Constantly_sort_Unchecked(object sender, RoutedEventArgs e)
+        {
+            SORTED.IsEnabled = true;
+            Clean.IsEnabled = true;
+            TypeList.IsEnabled = true;
+            Browser_1_Output.IsEnabled = true;
+            Creator.IsEnabled = true;
+            if (DirectoryList.SelectedItem != null)
+            {
+                Deletor.IsEnabled = true;
             }
         }
 
@@ -95,8 +83,10 @@ namespace SORTER
                     DirectoryList.Items.Add(pass1.SelectedPath);
                     Browser_1_Input.IsEnabled = false;
                     Creator.IsEnabled = true;
+                    Clean.IsEnabled = true;
                 }
             }
+            BUTTON_SORT_IS_ENABLE();
         }
 
         private void Browser_1_Output_Click(object sender, RoutedEventArgs e)
@@ -109,11 +99,15 @@ namespace SORTER
                     TEXT_2.Text = pass2.SelectedPath;
                 }
             }
+            BUTTON_SORT_IS_ENABLE();
         }
 
-        private void SORTED_Click(object sender, RoutedEventArgs e)
+        private void TypeList_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-            new SOURCE(DirectoryList.Items, TEXT_2.Text, TypeList.Text, false);
+            if (e.Changes.Count <= 2)
+            {
+                BUTTON_SORT_IS_ENABLE();
+            }
         }
 
         private void Replace_Click(object sender, RoutedEventArgs e)
@@ -123,15 +117,6 @@ namespace SORTER
             TEXT_2.Text = DirectoryList.SelectedItem.ToString();
             DirectoryList.Items.Remove(DirectoryList.SelectedItem);
             DirectoryList.Items.Add(temp);
-        }
-
-        private void Constantly_sort_Click(object sender, RoutedEventArgs e)
-        {
-            Sort_Checker.Visibility = Visibility.Visible;
-            Sort_Checker.IsChecked = true;
-            Constantly_sort.IsEnabled = false;
-            SORTED.IsEnabled = false;
-            new SOURCE(DirectoryList.Items, TEXT_2.Text, TypeList.Text, true);
         }
 
         private void Creator_Click(object sender, RoutedEventArgs e)
@@ -153,7 +138,7 @@ namespace SORTER
             ContextMenu notifyIconContextMenu = new ContextMenu();
             notifiIcon.ContextMenu = notifyIconContextMenu;
             Visibility = Visibility.Hidden;
-            notifiIcon.Icon = SORTER.Properties.Resources.output__1_;
+            notifiIcon.Icon = Properties.Resources.output__1_;
             notifiIcon.Visible = true;
             notifiIcon.ShowBalloonTip(1000, "The application runs in the background", "Click 'Open' to deploy application", ToolTipIcon.Info);
             notifyIconContextMenu.MenuItems.Add("Open", new EventHandler(Open));
@@ -161,12 +146,12 @@ namespace SORTER
             notifyIconContextMenu.MenuItems.Add("Close", new EventHandler(Close));
             while (notifiIcon.Visible == true)
             {
-                if (Sort_Checker.IsChecked == false)
+                if (Constantly_sort.IsChecked == false)
                 {
                     notifyIconContextMenu.MenuItems[1].Enabled = false;
                     notifyIconContextMenu.MenuItems[1].Checked = true;
                 }
-                else if (Sort_Checker.IsChecked == true)
+                else if (Constantly_sort.IsChecked == true)
                 {
                     notifyIconContextMenu.MenuItems[1].Enabled = true;
                 }
@@ -180,7 +165,7 @@ namespace SORTER
         }
         private void StopSort(object sender, EventArgs e)
         {
-            Sort_Checker.IsChecked = false;
+            Constantly_sort.IsChecked = false;
         }
         private void Close(object sender, EventArgs e)
         {
@@ -195,6 +180,7 @@ namespace SORTER
             {
                 Creator.IsEnabled = false;
                 Browser_1_Input.IsEnabled = true;
+                Clean.IsEnabled = false;
             }
         }
 
@@ -212,12 +198,26 @@ namespace SORTER
             }
             else
             {
-                if (Sort_Checker.IsChecked == false)
+                if (Constantly_sort.IsChecked == false)
                 {
                     Deletor.IsEnabled = true;
                 }
             }
             //deletorCheck
+
+            //BUTTON_REPLACE_IS_ENABLE
+            if (DirectoryList.SelectedItem != null && TEXT_2.Text != "")
+            {
+                if (Constantly_sort.IsChecked == false)
+                {
+                    Replace.IsEnabled = true;
+                }
+            }
+            else
+            {
+                Replace.IsEnabled = false;
+            }
+            //BUTTON_REPLACE_IS_ENABLE
         }
 
         private void Button_Suport_Click(object sender, RoutedEventArgs e)
@@ -225,26 +225,11 @@ namespace SORTER
 
         }
 
-        private void Sort_Checker_Unchecked(object sender, RoutedEventArgs e)
-        {
-            Sort_Checker.Visibility = Visibility.Hidden;
-            Constantly_sort.IsEnabled = true;
-            SORTED.IsEnabled = true;
-
-            Clean.IsEnabled = true;
-            TypeList.IsEnabled = true;
-            Browser_1_Output.IsEnabled = true;
-            Creator.IsEnabled = true;
-            if (DirectoryList.SelectedItem != null)
-            {
-                Deletor.IsEnabled = true;
-            }
-        }
-
         private void Clean_Click(object sender, RoutedEventArgs e)
         {
             DirectoryList.Items.Clear();
             Browser_1_Input.IsEnabled = true;
+            BUTTON_SORT_IS_ENABLE();
         }
 
         private void Min_Button1_Click(object sender, RoutedEventArgs e)
