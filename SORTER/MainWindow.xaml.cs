@@ -16,15 +16,17 @@ namespace SORTER
         public MainWindow()
         {
             InitializeComponent();
+        }
 
+        private void MainWind_Loaded(object sender, RoutedEventArgs e)
+        {
             BUTTON_SORT_IS_ENABLE();
-            BUTTON_REPLACE_IS_ENABLE();
             NON_STOP_CHECKER();
         }
 
         private async void BUTTON_SORT_IS_ENABLE()
         {
-            while (1 == 1)
+            while (MainWind.IsActive == true)
             {
                 while (Sort_Checker.IsChecked == false)
                 {
@@ -48,7 +50,7 @@ namespace SORTER
 
         private async void NON_STOP_CHECKER()
         {
-            while (1 == 1)
+            while (MainWind.IsActive == true)
             {
                 while (Sort_Checker.IsChecked == true)
                 {
@@ -66,25 +68,6 @@ namespace SORTER
             }
         }
 
-        private async void BUTTON_REPLACE_IS_ENABLE()
-        {
-            while (1 == 1)
-            {
-                if (DirectoryList.SelectedItem != null && TEXT_2.Text != "")
-                {
-                    if (Sort_Checker.IsChecked == false)
-                    {
-                        Replace.IsEnabled = true;
-                    }
-                }
-                else
-                {
-                    Replace.IsEnabled = false;
-                }
-                await Task.Delay(100);
-            }
-        }
-
         private void Browser_1_Input_Click(object sender, RoutedEventArgs e)
         {
             using (FolderBrowserDialog pass1 = new FolderBrowserDialog())
@@ -95,6 +78,7 @@ namespace SORTER
                     DirectoryList.Items.Add(pass1.SelectedPath);
                     Browser_1_Input.IsEnabled = false;
                     Creator.IsEnabled = true;
+                    Clean.IsEnabled = true;
                 }
             }
         }
@@ -195,6 +179,7 @@ namespace SORTER
             {
                 Creator.IsEnabled = false;
                 Browser_1_Input.IsEnabled = true;
+                Clean.IsEnabled = false;
             }
         }
 
@@ -218,6 +203,20 @@ namespace SORTER
                 }
             }
             //deletorCheck
+
+            //BUTTON_REPLACE_IS_ENABLE
+            if (DirectoryList.SelectedItem != null && TEXT_2.Text != "")
+            {
+                if (Sort_Checker.IsChecked == false)
+                {
+                    Replace.IsEnabled = true;
+                }
+            }
+            else
+            {
+                Replace.IsEnabled = false;
+            }
+            //BUTTON_REPLACE_IS_ENABLE
         }
 
         private void Button_Suport_Click(object sender, RoutedEventArgs e)
