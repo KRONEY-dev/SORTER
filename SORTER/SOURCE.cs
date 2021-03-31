@@ -6,7 +6,7 @@ using WinForms = System.Windows.Forms;
 
 namespace SORTER
 {
-    class SOURCE
+    public class SOURCE
     {
         readonly MainWindow MW = (MainWindow)System.Windows.Application.Current.MainWindow;
         public SOURCE(ItemCollection InputList, string Output_Directory, string type, bool repeat)

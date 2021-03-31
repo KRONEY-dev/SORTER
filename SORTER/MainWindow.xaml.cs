@@ -7,40 +7,19 @@ using WinForms = System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Media;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace SORTER
 {
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
+    /// 
     public partial class MainWindow : Window
     {
         public MainWindow()
         {
             InitializeComponent();
-        }
-
-        private void BUTTON_SORT_IS_ENABLE()
-        {
-            if (Constantly_sort.IsChecked == false)
-            {
-                //sortClickCheck
-                if (DirectoryList.Items.Count != 0 && TEXT_2.Text != "" && TypeList.Text != "")
-                {
-                    SORTED.IsEnabled = true;
-                    Constantly_sort.IsEnabled = true;
-                }
-                else
-                {
-                    SORTED.IsEnabled = false;
-                    Constantly_sort.IsEnabled = false;
-                }
-                //sortClickCheck
-            }
-            else
-            {
-                SORTED.IsEnabled = false;
-            }
         }
 
         private void SORTED_Click(object sender, RoutedEventArgs e)
@@ -75,38 +54,19 @@ namespace SORTER
 
         private void Browser_1_Input_Click(object sender, RoutedEventArgs e)
         {
-            using (FolderBrowserDialog pass1 = new FolderBrowserDialog())
-            {
-                pass1.Description = "Enter output directory files";
-                if (pass1.ShowDialog() == WinForms.DialogResult.OK)
-                {
-                    DirectoryList.Items.Add(pass1.SelectedPath);
-                    Browser_1_Input.IsEnabled = false;
-                    Creator.IsEnabled = true;
-                    Clean.IsEnabled = true;
-                }
-            }
-            BUTTON_SORT_IS_ENABLE();
+            Method_class.Browser_window(DirectoryList.GetType());
         }
 
         private void Browser_1_Output_Click(object sender, RoutedEventArgs e)
         {
-            using (FolderBrowserDialog pass2 = new FolderBrowserDialog())
-            {
-                pass2.Description = "Enter input directory files";
-                if (pass2.ShowDialog() == WinForms.DialogResult.OK)
-                {
-                    TEXT_2.Text = pass2.SelectedPath;
-                }
-            }
-            BUTTON_SORT_IS_ENABLE();
+            Method_class.Browser_window(TEXT_2.GetType());
         }
 
         private void TypeList_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
             if (e.Changes.Count <= 2)
             {
-                BUTTON_SORT_IS_ENABLE();
+                Method_class.BUTTON_SORT_IS_ENABLE();
             }
         }
 
@@ -229,7 +189,7 @@ namespace SORTER
         {
             DirectoryList.Items.Clear();
             Browser_1_Input.IsEnabled = true;
-            BUTTON_SORT_IS_ENABLE();
+            Method_class.BUTTON_SORT_IS_ENABLE();
         }
 
         private void Min_Button1_Click(object sender, RoutedEventArgs e)
