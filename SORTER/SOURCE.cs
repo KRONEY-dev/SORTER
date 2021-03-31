@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using WinForms = System.Windows.Forms;
@@ -10,7 +9,7 @@ namespace SORTER
     class SOURCE
     {
         readonly MainWindow MW = (MainWindow)System.Windows.Application.Current.MainWindow;
-        public SOURCE(ItemCollection InputList ,string Output_Directory, string type, bool repeat)
+        public SOURCE(ItemCollection InputList, string Output_Directory, string type, bool repeat)
         {
             //controller
             switch (repeat)
@@ -65,7 +64,7 @@ namespace SORTER
         private async void SourceAsync(string Input_DirectoryList_Items, string Output_Directory, string type)
         {
             //sourse.async
-            while (MW.Sort_Checker.IsChecked == true)
+            while (MW.Constantly_sort.IsChecked == true)
             {
                 MW.SORTED.IsEnabled = false;
                 string[] Input_list = Directory.GetFiles($@"{Input_DirectoryList_Items}");
