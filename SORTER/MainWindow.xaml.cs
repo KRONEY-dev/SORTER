@@ -1,20 +1,12 @@
 ﻿using System;
-using SORTER;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
-using WinForms = System.Windows.Forms;
 using System.Windows.Input;
-using System.Windows.Media.Animation;
-using System.Windows.Media;
-using Microsoft.WindowsAPICodePack.Dialogs;
+using WinForms = System.Windows.Forms;
 
 namespace SORTER
 {
-    /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
-    /// </summary>
-    /// 
     public partial class MainWindow : Window
     {
         public MainWindow()
@@ -81,14 +73,7 @@ namespace SORTER
 
         private void Creator_Click(object sender, RoutedEventArgs e)
         {
-            using (FolderBrowserDialog pass1 = new FolderBrowserDialog())
-            {
-                pass1.Description = "Enter output directory files";
-                if (pass1.ShowDialog() == WinForms.DialogResult.OK)
-                {
-                    DirectoryList.Items.Add(pass1.SelectedPath);
-                }
-            }
+            Method_class.Browser_window(DirectoryList.GetType());
         }
 
         readonly NotifyIcon notifiIcon = new NotifyIcon();
@@ -187,8 +172,10 @@ namespace SORTER
 
         private void Clean_Click(object sender, RoutedEventArgs e)
         {
+            Clean.IsEnabled = false;
             DirectoryList.Items.Clear();
             Browser_1_Input.IsEnabled = true;
+            Creator.IsEnabled = false;
             Method_class.BUTTON_SORT_IS_ENABLE();
         }
 

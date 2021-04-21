@@ -1,61 +1,75 @@
 ﻿using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace SORTER
 {
-    public static class Method_class
+    internal static class Method_class
     {
         static readonly Inter inter = new Inter();
         public static void Browser_window(Type control_type)
         {
-            CommonOpenFileDialog pass = new CommonOpenFileDialog();
-            pass.IsFolderPicker = true;
-            string Title_for_InputDialog = "Enter input directory files";
-            string Title_for_OutputDialog = "Enter output directory files";
-            if (control_type == typeof(ListBox))
+            using (CommonOpenFileDialog pass = new CommonOpenFileDialog())
             {
-                pass.Title = Title_for_InputDialog;
+                pass.IsFolderPicker = true;
+                string Title_for_InputDialog = "Enter input directory files";
+                string Title_for_OutputDialog = "Enter output directory files";
+                if (control_type == typeof(ListBox))
+                {
+                    pass.Title = Title_for_InputDialog;
+                    if (pass.ShowDialog() == CommonFileDialogResult.Ok)
+                    {
+                        inter.Browser_window(pass.FileName);
+                    }
+                }
+                else if (control_type == typeof(TextBlock))
+                {
+                    pass.Title = Title_for_OutputDialog;
+                    if (pass.ShowDialog() == CommonFileDialogResult.Ok)
+                    {
+                        inter.Browser_window_output(pass.FileName);
+                    }
+                }
             }
-            else if(control_type == typeof(TextBlock))
-            {
-                pass.Title = Title_for_OutputDialog;
-            }
-
-            if (pass.ShowDialog() == CommonFileDialogResult.Ok && pass.Title == Title_for_InputDialog)
-            {
-                inter.Browser_window(pass.FileName);
-            }
-            else
-            {
-                inter.Browser_window_output(pass.FileName);
-            }
+                
         }
 
         public static void BUTTON_SORT_IS_ENABLE() { inter.BUTTON_SORT_IS_ENABLE(); }
     }
 
-    partial class Inter
+    internal class Inter
     {
-        readonly MainWindow MW = (MainWindow)System.Windows.Application.Current.MainWindow;
+        private readonly MainWindow MW = (MainWindow)System.Windows.Application.Current.MainWindow;
+        private readonly string Exist_Message = "This directory is already exist!";
 
         public void Browser_window(string File_pass)
         {
-            MW.DirectoryList.Items.Add(File_pass);
-            MW.Browser_1_Input.IsEnabled = false;
-            MW.Creator.IsEnabled = true;
-            MW.Clean.IsEnabled = true;
-            BUTTON_SORT_IS_ENABLE();
+            if (MW.DirectoryList.Items.Contains(File_pass) || MW.TEXT_2.Text == File_pass)
+            {
+                MessageBox.Show(Exist_Message);
+            }
+            else
+            {
+                MW.DirectoryList.Items.Add(File_pass);
+                MW.Browser_1_Input.IsEnabled = false;
+                MW.Creator.IsEnabled = true;
+                MW.Clean.IsEnabled = true;
+                BUTTON_SORT_IS_ENABLE();
+            }
         }
 
         public void Browser_window_output(string File_pass)
         {
-            MW.TEXT_2.Text = File_pass;
-            BUTTON_SORT_IS_ENABLE();
+            if (MW.DirectoryList.Items.Contains(File_pass))
+            {
+                MessageBox.Show(Exist_Message);
+            }
+            else
+            {
+                MW.TEXT_2.Text = File_pass;
+                BUTTON_SORT_IS_ENABLE();
+            }
         }
 
         public void BUTTON_SORT_IS_ENABLE()
